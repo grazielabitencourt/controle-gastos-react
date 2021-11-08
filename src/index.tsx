@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createServer } from 'miragejs'
+import { createServer, Model } from 'miragejs'
 import { App } from './App';
 
 createServer({ 
-   //routes: quais sao as rotas que vou ter na minha api fictícia 
+   models: {
+    transaction: Model,
+   },
+
   routes() {
     this.namespace = 'api'; // pq está a partir desse endereço.
 
@@ -19,6 +22,12 @@ createServer({
           createdAt: new Date()
         }
       ]
+    })
+    
+    this.post('/transactions', (schema, request) => {
+      const data = JSON.parse(request.requestBody)
+
+      return schema.create('transaction', data)
     })
   }
 })
